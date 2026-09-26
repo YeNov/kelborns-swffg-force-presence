@@ -30,6 +30,7 @@
   "KFP.Threshold.Reminder": "This module reports these effects; it does not apply them.",
 
   "KFP.Window.Title": "Force Presence",
+  "KFP.Window.Open": "Open",
   "KFP.Window.Character": "Character",
   "KFP.Window.Status": "Status",
   "KFP.Window.SweepRunning": "End-of-session resolution in progress.",

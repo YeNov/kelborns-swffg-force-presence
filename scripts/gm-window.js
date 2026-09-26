@@ -418,9 +418,17 @@ export function openForcePresenceWindow() {
 }
 
 /**
- * A scene control rather than an entry in the system's destiny-tracker context menu:
- * that menu is a local const passed into the tracker and cannot be extended without
- * patching. `getSceneControlButtons` is core Foundry and costs the system nothing.
+ * Two entry points, because one of them is not always usable.
+ *
+ * THE SCENE CONTROL IS CANVAS-GATED. Foundry opens every tool click with
+ * `if ( !canvas.ready ) return;` (scene-controls.mjs #onChangeTool), so with no scene
+ * loaded the button renders, shows its tooltip, and silently does nothing -- which is
+ * precisely the situation a GM is in when doing end-of-session bookkeeping between
+ * scenes. Nothing about a window listing character data needs a canvas, so it must not
+ * depend on one.
+ *
+ * The Settings sidebar tab is always present, so it carries the reliable entry point and
+ * the scene control stays as the convenient one while a scene is open.
  */
 export function registerGmWindow() {
   Hooks.on("getSceneControlButtons", (controls) => {
@@ -429,6 +437,8 @@ export function registerGmWindow() {
     if (!tools) return;
     tools[MODULE_ID] = {
       name: MODULE_ID,
+      // Documented as required, and used to sort the tool into the palette.
+      order: 100,
       title: t("KFP.Window.Title"),
       icon: "fa-solid fa-circle-half-stroke",
       button: true,
@@ -437,5 +447,26 @@ export function registerGmWindow() {
         openForcePresenceWindow();
       },
     };
+  });
+
+  Hooks.on("renderSettings", (_app, element) => {
+    if (!game.user.isGM) return;
+    const root = element instanceof HTMLElement ? element : element?.[0];
+    if (!root || root.querySelector(`.${MODULE_ID}-settings`)) return;
+
+    const section = document.createElement("section");
+    section.classList.add("settings", "flexcol", `${MODULE_ID}-settings`);
+    section.innerHTML =
+      `<h4 class="divider">${t("KFP.Window.Title")}</h4>` +
+      `<button type="button">` +
+        // `inert` matches how core marks icons inside buttons, so the click always
+        // targets the button rather than the icon.
+        `<i class="fa-solid fa-circle-half-stroke" inert></i> ${t("KFP.Window.Open")}` +
+      `</button>`;
+    section.querySelector("button").addEventListener("click", () => openForcePresenceWindow());
+
+    const existing = root.querySelector("section.settings");
+    if (existing) existing.after(section);
+    else root.append(section);
   });
 }
