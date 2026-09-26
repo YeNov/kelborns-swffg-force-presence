@@ -449,6 +449,30 @@ export function registerGmWindow() {
     };
   });
 
+  // The toast CANNOT come from the tool's own onChange. Core returns at
+  // `if ( !canvas.ready ) return;` before it ever dispatches to the tool, so with no
+  // scene the callback is never reached -- which is exactly why the button looked dead.
+  // Intercept the click on the button element instead, in the capture phase, so it runs
+  // before core's delegated handler discards it.
+  Hooks.on("renderSceneControls", (_app, element) => {
+    if (!game.user.isGM) return;
+    const root = element instanceof HTMLElement ? element : element?.[0];
+    const button = root?.querySelector(`button[data-tool="${MODULE_ID}"]`);
+    if (!button || button.dataset.kfpBound === "1") return;
+    button.dataset.kfpBound = "1";
+
+    button.addEventListener(
+      "click",
+      (event) => {
+        if (canvas?.ready) return; // core will dispatch to onChange as normal
+        event.preventDefault();
+        event.stopPropagation();
+        ui.notifications.error("KFP.Window.NoCanvas", { localize: true, permanent: true });
+      },
+      { capture: true },
+    );
+  });
+
   Hooks.on("renderSettings", (_app, element) => {
     if (!game.user.isGM) return;
     const root = element instanceof HTMLElement ? element : element?.[0];
