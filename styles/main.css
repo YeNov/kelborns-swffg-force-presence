@@ -318,11 +318,20 @@ input.kfp-locked {
    correct, and a white-filled light pip would vanish against pale chrome.
    `.theme-dark` covers both placements: Foundry sets it on `body` for the interface
    theme and on the application element for per-window themes. */
+/* The dark pip is a BLACK glyph, so on dark chrome it needs an outline to exist at all.
+   The system's own version pairs the stroke with `paint-order: stroke fill`, which
+   paints the stroke first and the black fill over it -- leaving only the outer half of
+   a 1px stroke. That reads fine at dice-dialog size and disappears at the size these
+   pips are drawn here, which is why the dark pips were invisible.
+   So: let the stroke paint over the fill (the default order) to keep its full width,
+   and add a halo as a second line of defence in case -webkit-text-stroke is ever
+   unavailable. The glyph stays black-filled, so it is still visibly the DARK pip and
+   not confusable with the white ones. */
 .theme-dark .kfp-window span.dietype.dark,
 .kfp-window.theme-dark span.dietype.dark {
   color: #000;
   -webkit-text-stroke: 1px #fff;
-  paint-order: stroke fill;
+  text-shadow: 0 0 2px #fff, 0 0 1px #fff;
 }
 
 .theme-dark .kfp-window span.dietype.forcepoint,
@@ -330,6 +339,12 @@ input.kfp-locked {
 .kfp-window.theme-dark span.dietype.forcepoint,
 .kfp-window.theme-dark span.dietype.light {
   color: #fff;
+}
+
+/* Bigger than on a sheet: this table is scanned across a whole party, and a 1px outline
+   needs somewhere to live. */
+.kfp-window .kfp-point {
+  font-size: 1.25em;
 }
 
 /* --- chat cards and the player prompt ----------------------------------- */
