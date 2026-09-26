@@ -5,10 +5,16 @@ Presence* optional rules from the reSpecialized project's **Optional Morality Ru
 (credited in the source to contributor **Nori**), as an add-on to the `starwarsffg`
 system.
 
-Status: design settled 2026-09-26. Built: the pure rules core (§1), the sheet panel (§2)
-and the sweep state machine (§4, logic only). Not built: the GM window (§3), the
-socketlib transport, the conversion tool (§3) and the reporting surface (§6) beyond the
-panel's own threshold notes.
+Status: implemented 2026-09-26. Every component in this document is built: the pure
+rules core (§1), the sheet panel (§2), the GM window with the conversion tool (§3), the
+sweep with its socketlib transport (§4), the creation control (§5), the display-only
+reporting (§6) and the single setting (§7).
+
+Two things this document describes that the implementation names differently:
+`moralityMirror`/`fromMorality` became `alignmentClass`/`seedFromMorality` when the
+mirror was dropped, and the response deadline lives in `scripts/transport.js` as a
+constant (`PROMPT_DEADLINE_MS`, three minutes) rather than a setting, since the GM can
+claim any waiting row by hand at any time.
 
 ---
 

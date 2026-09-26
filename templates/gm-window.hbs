@@ -1,0 +1,107 @@
+{{!--
+  The GM's Force Presence window.
+
+  Two modes from one table: outside a sweep each row previews what the end of session
+  would do, and during a sweep each row shows its state machine position. Rows are never
+  hidden -- a failed or unresolved character has to stay visible, because the sweep will
+  not close while one exists.
+--}}
+<div class="kfp-window-body">
+
+  <div class="kfp-window-bar">
+    {{#if hasSweep}}
+      <span class="kfp-window-note">{{localize "KFP.Window.SweepRunning"}}</span>
+      <button type="button" data-action="forceClose">
+        <i class="fa-solid fa-xmark"></i> {{localize "KFP.Sweep.ForceClose"}}
+      </button>
+    {{else if openByOther}}
+      <span class="kfp-window-warn">
+        {{localize "KFP.Sweep.AlreadyOpen" gm=openByOther.gm}}
+      </span>
+      <button type="button" data-action="forceClose">
+        <i class="fa-solid fa-xmark"></i> {{localize "KFP.Sweep.ForceClose"}}
+      </button>
+    {{else}}
+      <button type="button" data-action="startSweep" {{#unless isActiveGM}}disabled{{/unless}}>
+        <i class="fa-solid fa-moon"></i> {{localize "KFP.Sweep.Title"}}
+      </button>
+      <button type="button" data-action="convert">
+        <i class="fa-solid fa-right-left"></i> {{localize "KFP.Convert.Title"}}
+      </button>
+      {{#if staleSweep}}
+        <button type="button" data-action="forceClose">
+          <i class="fa-solid fa-xmark"></i> {{localize "KFP.Sweep.ForceClose"}}
+        </button>
+      {{/if}}
+    {{/if}}
+  </div>
+
+  {{#unless isActiveGM}}
+    <p class="kfp-window-warn">{{localize "KFP.Sweep.NotActiveGM"}}</p>
+  {{/unless}}
+  {{#unless transportReady}}
+    <p class="kfp-window-warn">{{localize "KFP.Sweep.NoTransport"}}</p>
+  {{/unless}}
+
+  {{#if rows.length}}
+    <table class="kfp-table">
+      <thead>
+        <tr>
+          <th>{{localize "KFP.Window.Character"}}</th>
+          <th>{{localize "KFP.Title"}}</th>
+          <th class="kfp-num" title="{{localize "KFP.Panel.Conflict"}}">C</th>
+          <th class="kfp-num" title="{{localize "KFP.Panel.Tranquility"}}">T</th>
+          <th>{{localize "KFP.Window.Status"}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each rows as |row|}}
+          <tr class="kfp-row kfp-row-{{row.state}}">
+            <td class="kfp-row-name">{{row.name}}</td>
+            <td>
+              <span class="kfp-scale">
+                {{#each row.points as |point|}}<i class="{{point.cls}}"></i>{{/each}}
+                <span class="kfp-scale-count">{{row.counts}}</span>
+              </span>
+              {{#if row.thresholdText}}
+                <div class="kfp-note kfp-note-quiet">{{row.thresholdText}}</div>
+              {{/if}}
+            </td>
+            <td class="kfp-num">{{row.conflict}}</td>
+            <td class="kfp-num">{{row.tranquility}}</td>
+            <td class="kfp-row-status">
+              {{#if row.stateLabel}}<div>{{row.stateLabel}}</div>{{/if}}
+              {{#if row.preview}}<div class="kfp-note kfp-note-quiet">{{row.preview}}</div>{{/if}}
+
+              {{#if row.canTakeover}}
+                <button type="button" class="kfp-small" data-action="takeover" data-actor-id="{{row.actorId}}">
+                  {{localize "KFP.Sweep.Takeover"}}
+                </button>
+              {{/if}}
+
+              {{#each row.options as |option|}}
+                <button type="button" class="kfp-small" data-action="choose"
+                        data-actor-id="{{row.actorId}}" data-move="{{option.move}}">
+                  {{option.label}}
+                </button>
+              {{/each}}
+
+              {{#if row.canRetry}}
+                <button type="button" class="kfp-small" data-action="retry" data-actor-id="{{row.actorId}}">
+                  {{localize "KFP.Sweep.Retry"}}
+                </button>
+              {{/if}}
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{else}}
+    <p class="kfp-window-note">{{localize "KFP.Sweep.NoCharacters"}}</p>
+  {{/if}}
+
+  <p class="kfp-note kfp-note-quiet kfp-window-footnote">
+    {{localize "KFP.Threshold.Reminder"}}
+    {{localize "KFP.Window.DeadlineNote" seconds=deadlineSeconds}}
+  </p>
+</div>

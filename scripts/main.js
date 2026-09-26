@@ -1,20 +1,22 @@
 /**
  * Module entry point.
  *
- * SCAFFOLD STATE: the pure rules core, the sweep state machine and the character sheet
- * panel are built. Still TODO:
+ * Layers, outermost last:
  *
- *   - scripts/gm-window.js     standalone Application + scene control      TODO
- *   - scripts/transport.js     socketlib handshake + the response deadline TODO
- *
- * So the end-of-session sweep cannot be run from the UI yet, though its logic is
- * implemented and tested.
+ *   rules.js / sweep.js    pure -- no Foundry, no I/O, covered by `node --test`
+ *   actors.js resolve.js   document reads and writes
+ *   transport.js           socketlib, plus the response deadline socketlib lacks
+ *   sheet-panel.js         renderActorSheetV2 injection
+ *   gm-window.js           the GM's Application, and the sweep orchestration
+ *   main.js                registration only
  */
 
 import { MODULE_ID, SETTINGS } from "./constants.js";
 import * as rules from "./rules.js";
 import { createSweep } from "./sweep.js";
 import { registerSheetPanel } from "./sheet-panel.js";
+import { registerTransport } from "./transport.js";
+import { registerGmWindow, openForcePresenceWindow } from "./gm-window.js";
 
 Hooks.once("init", () => {
   // Pass the i18n KEYS, not localized strings. Foundry localizes a setting's name and
@@ -42,10 +44,11 @@ Hooks.once("init", () => {
   });
 
   registerSheetPanel();
+  registerGmWindow();
+  registerTransport();
 
-  // Console handle for inspection while the remaining adapters are unbuilt.
   const self = game.modules.get(MODULE_ID);
-  if (self) self.api = { rules, createSweep };
+  if (self) self.api = { rules, createSweep, openWindow: openForcePresenceWindow };
 });
 
 Hooks.once("ready", () => {
@@ -53,5 +56,18 @@ Hooks.once("ready", () => {
     console.warn(`${MODULE_ID} | inactive: this module is for the starwarsffg system.`);
     return;
   }
-  console.log(`${MODULE_ID} | sheet panel active. GM window and sweep transport not yet wired.`);
+
+  // A sweep lives on the GM client that started it. If that client reloaded or crashed
+  // mid-sweep the lock survives in world settings with nothing driving it, so say so
+  // rather than letting the next sweep be refused with no explanation.
+  if (game.user.isGM) {
+    const open = game.settings.get(MODULE_ID, SETTINGS.OPEN_SWEEP);
+    if (open) {
+      ui.notifications.warn(
+        game.i18n.format("KFP.Sweep.AlreadyOpen", {
+          gm: game.users.get(open.gmUserId)?.name ?? "?",
+        }),
+      );
+    }
+  }
 });

@@ -167,3 +167,108 @@ input.kfp-locked {
   border: none;
   padding: 0.3rem 0.1rem;
 }
+
+/* --- GM window ---------------------------------------------------------- */
+
+.kfp-window-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  overflow: auto;
+  padding: 0.25rem;
+}
+
+.kfp-window-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.kfp-window-bar button {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.kfp-window-note {
+  font-size: 0.85em;
+  opacity: 0.75;
+}
+
+.kfp-window-warn {
+  font-size: 0.85em;
+  color: #b3261e;
+}
+
+.kfp-window-footnote {
+  margin-top: auto;
+}
+
+.kfp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+
+.kfp-table th,
+.kfp-table td {
+  text-align: left;
+  padding: 0.25rem 0.35rem;
+  border-bottom: 1px solid var(--kfp-border, rgba(128, 128, 128, 0.25));
+  vertical-align: top;
+}
+
+.kfp-table th.kfp-num,
+.kfp-table td.kfp-num {
+  text-align: center;
+  width: 2.2em;
+  font-variant-numeric: tabular-nums;
+}
+
+.kfp-row-name {
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* A row still waiting on someone, and a row that failed to save, must both be obvious:
+   the sweep will not close while either exists. */
+.kfp-row-prompted .kfp-row-status,
+.kfp-row-gm-owned .kfp-row-status {
+  font-weight: bold;
+}
+
+.kfp-row-failed {
+  background: rgba(179, 38, 30, 0.12);
+}
+
+.kfp-row-resolved {
+  opacity: 0.6;
+}
+
+.kfp-small {
+  width: auto;
+  flex: 0 0 auto;
+  font-size: 0.85em;
+  padding: 0.05rem 0.4rem;
+  margin: 0.15rem 0.15rem 0 0;
+}
+
+/* --- chat cards and the player prompt ----------------------------------- */
+
+.kfp-card-scale {
+  font-size: 1.2em;
+  letter-spacing: 0.08em;
+}
+
+.kfp-card-notes {
+  margin: 0.25rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.9em;
+}
+
+.kfp-card-quiet,
+.kfp-prompt-summary {
+  font-size: 0.85em;
+  opacity: 0.7;
+}

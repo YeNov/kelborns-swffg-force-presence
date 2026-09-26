@@ -25,6 +25,7 @@
 
 import { MODULE_ID, FLAGS, MOVES, TOTAL_POINTS } from "./constants.js";
 import { normalize, thresholds, alignmentClass, renderScale } from "./rules.js";
+import { isForceUser, hasState } from "./actors.js";
 
 const PANEL_CLASS = "kfp-panel";
 
@@ -40,25 +41,6 @@ const t = (key, data) => (data ? game.i18n.format(key, data) : game.i18n.localiz
 /* ------------------------------------------------------------------ *
  * Reading the actor
  * ------------------------------------------------------------------ */
-
-/**
- * Is this a Force user? The same predicate the Codex sheet already uses to decide
- * whether to show its Morality box, reused verbatim rather than inventing a toggle:
- * the enableForcePool option not explicitly off, AND an actual Force pool or Force
- * power items. A wizard-built actor has the flag undefined, hence `!== false`.
- */
-function isForceUser(actor) {
-  if (actor?.flags?.starwarsffg?.config?.enableForcePool === false) return false;
-  const pool = Number(actor?.system?.stats?.forcePool?.max) || 0;
-  if (pool > 0) return true;
-  return actor?.items?.some?.((i) => i.type === "forcepower") ?? false;
-}
-
-/** Whether the module already holds state for this actor, in which case always show. */
-function hasState(actor) {
-  const flags = actor?.flags?.[MODULE_ID];
-  return !!flags && Object.keys(flags).length > 0;
-}
 
 function readState(actor) {
   const scale = normalize({

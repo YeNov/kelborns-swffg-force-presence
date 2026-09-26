@@ -7,10 +7,6 @@ project's *Optional Morality Rules* (credited there to **Nori**) for the
 Replaces the Force and Destiny **Morality score** with a ten-point **Balance scale** and
 adds **Tranquility** as the counterweight to Conflict.
 
-> **Status: scaffold.** The rules core and the end-of-session state machine are built and
-> tested. The character sheet panel, the GM window and the socket transport are not yet
-> wired, so installing this today changes nothing in a world.
-
 Requires [socketlib](https://github.com/manuelVo/foundryvtt-socketlib).
 
 ## The rules
@@ -85,6 +81,32 @@ difficult it is to achieve redemption from the Dark Side."
 
 `tests/rules.test.js` pins all three printed characters. If you intend to change this,
 change those assertions first and read the comment at the top of `scripts/rules.js`.
+
+## Using it
+
+**The panel** appears on a Force user's character sheet — the classic sheet's
+*Obligation / Duty / Morality* tab, or beside the Codex sheet's bio-stats. It shows the
+scale, Conflict and Tranquility, any threshold the character has crossed, and the
+one-time starting choice. The owner can edit all of it, the same freedom they already
+have over the Morality box.
+
+**The GM window** is the crossed-circle button in the Token scene controls. It lists
+every character tracking Force Presence with their scale, tallies and thresholds, and
+previews what the end of session would do to each one.
+
+**End of session** is the sweep. The GM starts it; each player is asked to choose for
+their own character, and the GM can claim any row at any moment — or wait, since a
+player who does not answer within three minutes falls to the GM automatically. A row is
+only finished once its write has actually saved, and the sweep will not close while any
+row is unresolved or failed. Both tallies zero as each character resolves.
+
+Some rows never ask anyone: equal Conflict and Tranquility moves nothing, and a
+Conflict-dominant character with no Neutral points has only one legal move, so it is
+taken without a prompt.
+
+Only the active GM can run a sweep, and only one can be open at a time. If a GM's client
+crashes mid-sweep, **Force close** releases the lock — characters already resolved stay
+resolved.
 
 ## Settings
 
