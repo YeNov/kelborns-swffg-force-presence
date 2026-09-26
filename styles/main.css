@@ -329,20 +329,27 @@ input.kfp-locked {
    not confusable with the white ones. */
 .theme-dark .kfp-window span.dietype.dark,
 .kfp-window.theme-dark span.dietype.dark {
-  color: #000;
+  color: #000 !important;
   -webkit-text-stroke: 1px #fff;
   text-shadow: 0 0 2px #fff, 0 0 1px #fff;
 }
 
 /* White FILL, not just a white outline. The light pip uses the filled disc character
    here (see pips.js `solid`); the neutral glyph is half-filled by the font, so colour
-   alone is enough for it. A thin dark halo keeps both readable if the window is ever
-   dragged over pale content. */
+   alone is enough for it.
+   
+   WHY `!important` IS LOAD-BEARING HERE, and not laziness: the system injects
+   mandar.css at runtime with `$("head").append('<link …>')`, so it is UNLAYERED, while
+   a module's declared `styles` are placed by Foundry in `@layer modules`. An unlayered
+   declaration beats every layered one regardless of specificity, so mandar.css's
+   `span.dietype.light { color: black }` wins against any selector this file can write.
+   An important declaration is the only thing that outranks it. This applies to colour
+   only -- the stroke and shadow above need no help, because nothing competes on them. */
 .theme-dark .kfp-window span.dietype.forcepoint,
 .theme-dark .kfp-window span.dietype.light,
 .kfp-window.theme-dark span.dietype.forcepoint,
 .kfp-window.theme-dark span.dietype.light {
-  color: #fff;
+  color: #fff !important;
   -webkit-text-stroke: 0;
   text-shadow: 0 0 1px rgba(0, 0, 0, 0.6);
 }
