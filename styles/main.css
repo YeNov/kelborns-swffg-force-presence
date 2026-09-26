@@ -1,0 +1,13 @@
+/* Force Presence panel. Scale glyphs, tallies, threshold notes. */
+
+.kfp-panel { margin-top: 0.5rem; }
+
+.kfp-scale { display: flex; gap: 0.15rem; align-items: center; font-size: 1.1rem; }
+.kfp-point-dark { color: var(--kfp-dark, #1a1a1a); }
+.kfp-point-neutral { color: var(--kfp-neutral, #7a7a7a); }
+.kfp-point-light { color: var(--kfp-light, #cfcfcf); }
+
+.kfp-tallies { display: flex; gap: 0.5rem; margin-top: 0.35rem; }
+.kfp-note { font-size: 0.85em; opacity: 0.85; margin-top: 0.35rem; }
+.kfp-note-dark { color: var(--kfp-note-dark, #b3261e); }
+.kfp-note-light { color: var(--kfp-note-light, #1f5fb3); }

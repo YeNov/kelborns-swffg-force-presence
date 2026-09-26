@@ -1,0 +1,46 @@
+{
+  "KFP.Title": "Force Presence",
+
+  "KFP.Settings.PublicCards.Name": "Public resolution cards",
+  "KFP.Settings.PublicCards.Hint": "Post end-of-session results to the whole table. Off by default: the base rules let a player keep their alignment secret, so cards are whispered to the GM and the character's owner.",
+
+  "KFP.Scale.Dark": "Dark Side",
+  "KFP.Scale.Neutral": "Neutral",
+  "KFP.Scale.Light": "Light Side",
+
+  "KFP.Panel.Conflict": "Conflict",
+  "KFP.Panel.Tranquility": "Tranquility",
+  "KFP.Panel.StartingChoice": "Starting choice",
+  "KFP.Panel.StartingChoice.Light": "Flip one Balance Point to Light Side",
+  "KFP.Panel.StartingChoice.Dark": "Flip one Balance Point to Dark Side",
+  "KFP.Panel.StartingChoice.None": "Took XP or credits instead",
+  "KFP.Panel.MoralityUnused": "Not used under Force Presence. The Balance scale replaces the Morality score.",
+
+  "KFP.Move.neutral-to-dark": "Neutral → Dark Side",
+  "KFP.Move.light-to-dark": "Light Side → Dark Side",
+  "KFP.Move.dark-to-neutral": "Dark Side → Neutral",
+  "KFP.Move.neutral-to-light": "Neutral → Light Side",
+
+  "KFP.Threshold.DarkSide": "Dark Side Threshold: strain threshold −2, wound threshold +2, generate Force points using dark side results.",
+  "KFP.Threshold.Paragon": "Light Side Paragon: strain threshold +2. A dark side Force user at this point is redeemed and generates using light side results.",
+  "KFP.Threshold.Consumed": "Consumed by the dark side: seek redemption or become an NPC controlled by the GM. Redemption needs seven Light Side Balance Points.",
+  "KFP.Threshold.DestinyFlip": "At the start of each session, flip one Destiny Point from Light to Dark, after all rolls are completed.",
+  "KFP.Threshold.DestinyBonus": "At the start of each session, add one bonus Light Side point to the Destiny Pool, after all rolls are completed.",
+  "KFP.Threshold.Reminder": "This module reports these effects; it does not apply them.",
+
+  "KFP.Sweep.Title": "End of Session",
+  "KFP.Sweep.Waiting": "Waiting for {player}…",
+  "KFP.Sweep.Takeover": "Choose for them",
+  "KFP.Sweep.Retry": "Retry",
+  "KFP.Sweep.Failed": "Write failed: {error}",
+  "KFP.Sweep.Reset": "Conflict or Tranquility changed while waiting — recomputed.",
+  "KFP.Sweep.NoChange": "Conflict and Tranquility were equal; the scale is unchanged.",
+  "KFP.Sweep.AlreadyOpen": "A sweep is already open, started by {gm}.",
+  "KFP.Sweep.ForceClose": "Force close",
+  "KFP.Sweep.NoActiveGM": "No active GM, so the sweep cannot run.",
+
+  "KFP.Convert.Title": "Convert from Morality",
+  "KFP.Convert.Seeded": "Converted {count} character(s) from their Morality score.",
+  "KFP.Convert.SkippedInitialized": "{count} already had a Balance scale and were left alone.",
+  "KFP.Convert.SkippedUntracked": "{count} were not using the Morality system and were left at ten Neutral."
+}
