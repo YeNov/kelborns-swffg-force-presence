@@ -139,18 +139,36 @@ function startingChoiceHtml(state, editable) {
   );
 }
 
-function panelHtml(state, editable) {
+/**
+ * The panel. On the Codex sheet it is built as a real `cdx-panel` with a `cdx-panel-head`
+ * rather than styled to look like one: those classes draw entirely from the scheme's CSS
+ * variables (`--cdx-paper2`, `--cdx-line`, `--cdx-clip`, `--cdx-brown`), so the card
+ * follows whichever Codex theme the user picked without the module knowing any of them.
+ */
+function panelHtml(state, editable, isCodex) {
+  const body =
+    scaleHtml(state) +
+    `<div class="kfp-steppers">` +
+      `<span class="kfp-stepper"><label>${t("KFP.Scale.Dark")}</label>${stepperHtml("dark", state.dark, editable)}</span>` +
+      `<span class="kfp-stepper"><label>${t("KFP.Scale.Light")}</label>${stepperHtml("light", state.light, editable)}</span>` +
+    `</div>` +
+    tallyHtml(state, editable) +
+    startingChoiceHtml(state, editable) +
+    notesHtml(state);
+
+  if (isCodex) {
+    return (
+      `<div class="${PANEL_CLASS} kfp-codex cdx-panel">` +
+        `<div class="cdx-panel-head">${t("KFP.Title")}</div>` +
+        `<div class="kfp-body">${body}</div>` +
+      `</div>`
+    );
+  }
+
   return (
     `<div class="${PANEL_CLASS}">` +
       `<div class="kfp-head">${t("KFP.Title")}</div>` +
-      scaleHtml(state) +
-      `<div class="kfp-steppers">` +
-        `<span class="kfp-stepper"><label>${t("KFP.Scale.Dark")}</label>${stepperHtml("dark", state.dark, editable)}</span>` +
-        `<span class="kfp-stepper"><label>${t("KFP.Scale.Light")}</label>${stepperHtml("light", state.light, editable)}</span>` +
-      `</div>` +
-      tallyHtml(state, editable) +
-      startingChoiceHtml(state, editable) +
-      notesHtml(state) +
+      `<div class="kfp-body">${body}</div>` +
     `</div>`
   );
 }
@@ -166,17 +184,21 @@ function panelHtml(state, editable) {
  * @returns {{node: Element, how: "after"|"append"|"before"}|null}
  */
 function findAnchor(element, isCodex) {
-  const conflict = element.querySelector('input[name="data.conflict.value"]');
-  if (conflict) {
-    const block = isCodex ? conflict.closest(".cdx-bstat") : conflict.closest(".resource");
-    if (block) return { node: block, how: "after" };
-  }
-
   if (isCodex) {
-    // `.cdx-bio-stats` is gated by an {{#if}}; `.cdx-float-soft-wrap` is not.
+    // Below the Morality / Conflict row, not inside it. `.cdx-bio-stats` is a flex row
+    // whose children are sized `flex: 1`, so anchoring to the Conflict panel would make
+    // the scale a fourth column squeezed in beside three number boxes.
+    const bioStats = element.querySelector(".cdx-bio-stats");
+    if (bioStats) return { node: bioStats, how: "after" };
+
+    // That row is gated by an {{#if}} and can be absent; this wrapper is not.
     const soft = element.querySelector(".cdx-float-soft-wrap");
     if (soft) return { node: soft, how: "before" };
   } else {
+    const conflict = element.querySelector('input[name="data.conflict.value"]');
+    const block = conflict?.closest(".resource");
+    if (block) return { node: block, how: "after" };
+
     // Rendered unconditionally; only the boxes inside it are gated.
     const tab = element.querySelector('.tab[data-tab="obligation"]');
     if (tab) return { node: tab, how: "append" };
@@ -354,10 +376,9 @@ export function registerSheetPanel() {
       }
 
       const wrapper = document.createElement("div");
-      wrapper.innerHTML = panelHtml(state, editable);
+      wrapper.innerHTML = panelHtml(state, editable, isCodex);
       const panel = wrapper.firstElementChild;
       if (!panel) return;
-      if (isCodex) panel.classList.add("kfp-codex");
 
       place(anchor, panel);
       if (editable) activateListeners(panel, actor);

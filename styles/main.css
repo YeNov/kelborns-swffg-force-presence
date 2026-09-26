@@ -9,9 +9,12 @@
 
 .kfp-panel {
   margin: 0.5rem 0;
-  padding: 0.4rem 0.5rem;
   border: 1px solid var(--kfp-border, rgba(128, 128, 128, 0.35));
   border-radius: 3px;
+}
+
+.kfp-body {
+  padding: 0.4rem 0.5rem;
 }
 
 .kfp-head {
@@ -161,11 +164,39 @@ input.kfp-locked {
 
 /* --- Codex theme ------------------------------------------------------- */
 
-/* The Codex sheet draws its own notched panels; borrow the look rather than stacking a
-   second border inside one. */
+/* On the Codex sheet the panel IS a cdx-panel, so the scheme supplies the paper colour,
+   the border, the clipped corners and the header bar. Everything here is layout only --
+   no colours, or the module would have to know about each scheme and would drift from
+   them. `.cdx-panel` already carries margin-bottom: 10px. */
 .cdx .kfp-panel.kfp-codex {
   border: none;
-  padding: 0.3rem 0.1rem;
+  border-radius: 0;
+  margin: 0 0 10px;
+}
+
+.cdx .kfp-panel.kfp-codex .kfp-body {
+  padding: 8px 10px;
+}
+
+/* The scheme's bio-stat inputs are 24px Orbitron and centred, which is right for a lone
+   big number and wrong for a pair of small tallies sitting under a scale. */
+.cdx .kfp-panel.kfp-codex .kfp-tally-input {
+  font-size: 1rem;
+  font-weight: 700;
+  width: 3.5em;
+}
+
+/* Inherit the scheme's ink for text that is not one of the three point states. */
+.cdx .kfp-panel.kfp-codex .kfp-stepper label,
+.cdx .kfp-panel.kfp-codex .kfp-tally label,
+.cdx .kfp-panel.kfp-codex .kfp-count,
+.cdx .kfp-panel.kfp-codex .kfp-scale-count {
+  color: var(--cdx-ink);
+}
+
+.cdx .kfp-panel.kfp-codex .kfp-step {
+  border-color: var(--cdx-line);
+  color: var(--cdx-ink);
 }
 
 /* --- GM window ---------------------------------------------------------- */
