@@ -397,10 +397,24 @@ export class ForcePresenceWindow extends HandlebarsApplicationMixin(ApplicationV
 
 let instance = null;
 
+/**
+ * Open the window, and never fail silently.
+ *
+ * A scene-control button that does nothing when clicked is the least debuggable failure
+ * in Foundry: the click dispatches, the callback throws, and the exception dies inside
+ * core's handler with no UI. Surface it instead.
+ */
 export function openForcePresenceWindow() {
-  instance ??= new ForcePresenceWindow();
-  instance.render({ force: true });
-  return instance;
+  try {
+    instance ??= new ForcePresenceWindow();
+    instance.render({ force: true });
+    return instance;
+  } catch (err) {
+    instance = null; // a half-constructed application must not be reused
+    console.error(`${MODULE_ID} | could not open the Force Presence window`, err);
+    ui.notifications.error(`Force Presence: ${err.message}`);
+    return null;
+  }
 }
 
 /**
@@ -418,7 +432,10 @@ export function registerGmWindow() {
       title: t("KFP.Window.Title"),
       icon: "fa-solid fa-circle-half-stroke",
       button: true,
-      onChange: () => openForcePresenceWindow(),
+      onChange: (event) => {
+        event?.preventDefault?.();
+        openForcePresenceWindow();
+      },
     };
   });
 }
