@@ -60,7 +60,7 @@
             <td class="kfp-row-name">{{row.name}}</td>
             <td>
               <span class="kfp-scale">
-                {{#each row.points as |point|}}<i class="{{point.cls}}"></i>{{/each}}
+                {{#each row.points as |point|}}{{{point}}}{{/each}}
                 <span class="kfp-scale-count">{{row.counts}}</span>
               </span>
               {{#if row.thresholdText}}

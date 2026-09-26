@@ -37,20 +37,13 @@
   line-height: 1;
 }
 
-/* Dark and Light are near-black and near-white in the source's printed scale. Both get
-   a faint outline so neither disappears against a dark or a light sheet theme. */
-.kfp-point-dark {
-  color: #14110f;
-  text-shadow: 0 0 1px rgba(255, 255, 255, 0.55);
-}
-
-.kfp-point-neutral {
-  color: #8a8a8a;
-}
-
-.kfp-point-light {
-  color: #f2efe9;
-  text-shadow: 0 0 1px rgba(0, 0, 0, 0.55);
+/* No colours here on purpose. The pips are the system's own die symbols, which
+   distinguish the three states by SHAPE and are already styled by the system -- and by
+   each Codex scheme, which adds contrast strokes under dark themes. Colouring them here
+   would fight both. Size only. */
+.kfp-point {
+  font-size: 1.05em;
+  line-height: 1;
 }
 
 .kfp-scale-count {
@@ -197,6 +190,19 @@ input.kfp-locked {
 .cdx .kfp-panel.kfp-codex .kfp-step {
   border-color: var(--cdx-line);
   color: var(--cdx-ink);
+}
+
+/* Centred, like the bio-stat panels it sits under. Scoped to Codex: the classic sheet
+   was not asked to change, and its blocks have their own alignment. */
+.cdx .kfp-panel.kfp-codex .kfp-body {
+  text-align: center;
+}
+
+.cdx .kfp-panel.kfp-codex .kfp-scale,
+.cdx .kfp-panel.kfp-codex .kfp-steppers,
+.cdx .kfp-panel.kfp-codex .kfp-tallies,
+.cdx .kfp-panel.kfp-codex .kfp-starting {
+  justify-content: center;
 }
 
 /* --- GM window ---------------------------------------------------------- */

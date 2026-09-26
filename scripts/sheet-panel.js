@@ -26,15 +26,9 @@
 import { MODULE_ID, FLAGS, MOVES, TOTAL_POINTS } from "./constants.js";
 import { normalize, thresholds, alignmentClass, renderScale } from "./rules.js";
 import { isForceUser, hasState } from "./actors.js";
+import { pipHtml, diceTheme } from "./pips.js";
 
 const PANEL_CLASS = "kfp-panel";
-
-/** Font Awesome 7 glyphs for the three Balance Point states. V14 ships FA7. */
-const GLYPHS = Object.freeze({
-  dark: "fa-solid fa-circle",
-  neutral: "fa-solid fa-circle-half-stroke",
-  light: "fa-regular fa-circle",
-});
 
 const t = (key, data) => (data ? game.i18n.format(key, data) : game.i18n.localize(key));
 
@@ -60,8 +54,9 @@ function readState(actor) {
  * ------------------------------------------------------------------ */
 
 function scaleHtml(scale) {
+  const theme = diceTheme();
   const points = renderScale(scale)
-    .map((state) => `<i class="${GLYPHS[state]} kfp-point-${state}" data-kfp-state="${state}"></i>`)
+    .map((state) => pipHtml(state, theme))
     .join("");
   const label = `${scale.dark} / ${scale.neutral} / ${scale.light}`;
   return `<div class="kfp-scale" data-tooltip="${t("KFP.Scale.Dark")} ${scale.dark} · ${t("KFP.Scale.Neutral")} ${scale.neutral} · ${t("KFP.Scale.Light")} ${scale.light}">${points}<span class="kfp-scale-count">${label}</span></div>`;

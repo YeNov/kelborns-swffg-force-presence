@@ -18,15 +18,10 @@ import { normalize, thresholds, renderScale, resolveSession } from "./rules.js";
 import { createSweep } from "./sweep.js";
 import { forcePresenceActors, ownerUser } from "./actors.js";
 import { askPlayer, cancelPlayerPrompt, isTransportReady, PROMPT_DEADLINE_MS } from "./transport.js";
+import { pipHtml, diceTheme } from "./pips.js";
 import { applyResolution, postResolutionCard, postSweepSummary, readLive } from "./resolve.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
-
-const GLYPHS = Object.freeze({
-  dark: "fa-solid fa-circle",
-  neutral: "fa-solid fa-circle-half-stroke",
-  light: "fa-regular fa-circle",
-});
 
 const t = (key, data) => (data ? game.i18n.format(key, data) : game.i18n.localize(key));
 
@@ -131,8 +126,11 @@ export class ForcePresenceWindow extends HandlebarsApplicationMixin(ApplicationV
     if (th.paragon) notes.push(t("KFP.Window.Paragon"));
     if (th.destinyFlip) notes.push(t("KFP.Window.DestinyFlip"));
     if (th.destinyBonus) notes.push(t("KFP.Window.DestinyBonus"));
+    const theme = diceTheme();
     return {
-      points: renderScale(s).map((state) => ({ cls: `${GLYPHS[state]} kfp-point-${state}` })),
+      // Raw HTML: the template prints these with {{{ }}} so the system's symbol font
+      // renders, matching the pips on the character sheets.
+      points: renderScale(s).map((state) => pipHtml(state, theme)),
       counts: `${s.dark}/${s.neutral}/${s.light}`,
       thresholdText: notes.join(" · "),
     };

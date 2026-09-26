@@ -2,7 +2,7 @@
   "id": "kelborns-swffg-force-presence",
   "title": "Kelborn's SWFFG Force Presence",
   "description": "Replaces Force and Destiny Morality with the reSpecialized project's Tranquility and Force Presence optional rules: a ten-point Balance scale (Dark / Neutral / Light), Tranquility alongside Conflict, and an end-of-session resolution the GM runs for the table.",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "compatibility": {
     "minimum": "13",
     "verified": "14"
