@@ -161,10 +161,42 @@ export function isTransportReady() {
  * Registration
  * ------------------------------------------------------------------ */
 
-export function registerTransport() {
-  Hooks.once("socketlib.ready", () => {
+/**
+ * Attach to socketlib, whichever order the two modules happened to initialise in.
+ *
+ * socketlib fires `socketlib.ready` from inside ITS OWN `init` hook. This module calls
+ * `registerTransport()` from inside `init` too, so if socketlib's handler ran first the
+ * event has already fired and a `Hooks.once` registered now would never be called --
+ * leaving `socket` null and every sweep row silently falling to the GM with
+ * "socketlib unavailable". Hook ordering between two modules is not something either of
+ * them controls, so do not depend on it: listen for the event AND try immediately, since
+ * if it has already fired the global is already there.
+ */
+function attach() {
+  if (socket) return true;
+  if (typeof socketlib === "undefined") return false;
+  try {
     socket = socketlib.registerModule(MODULE_ID);
     socket.register("askChoice", onAskChoice);
     socket.register("cancelPrompt", onCancelPrompt);
+    return true;
+  } catch (err) {
+    console.error(`${MODULE_ID} | socketlib registration failed`, err);
+    return false;
+  }
+}
+
+export function registerTransport() {
+  Hooks.once("socketlib.ready", attach); // socketlib initialised after us
+  attach(); // ...or before us, in which case the event is already gone
+
+  Hooks.once("ready", () => {
+    if (attach()) return;
+    // Not fatal: the sweep still works, every row just falls to the GM. Say so once,
+    // clearly, rather than only at the point a sweep is started.
+    console.warn(
+      `${MODULE_ID} | socketlib is not available. The end-of-session sweep cannot ask ` +
+        `players to choose; every row will fall to the GM.`,
+    );
   });
 }

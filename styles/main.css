@@ -103,8 +103,15 @@
   opacity: 1;
 }
 
+/* Foundry core sets `input[type=number] { width: 100% }` in its `elements.forms` layer.
+   Fighting that with specificity is fragile; setting an explicit FLEX-BASIS is not,
+   because for a flex item flex-basis takes precedence over width. The earlier
+   `flex: 0 0 auto` did not help precisely because `auto` basis defers to width -- which
+   core had already set to 100%. */
 .kfp-tally-input {
-  width: 3.2em;
+  flex: 0 0 3.5em;
+  width: 3.5em; /* fallback if the row is ever not a flex container */
+  min-width: 0;
   text-align: center;
 }
 
@@ -178,7 +185,6 @@ input.kfp-locked {
 .cdx .kfp-panel.kfp-codex .kfp-tally-input {
   font-size: 1rem;
   font-weight: 700;
-  width: 3.5em;
 }
 
 /* Inherit the scheme's ink for text that is not one of the three point states. */
@@ -202,11 +208,15 @@ input.kfp-locked {
   padding: 0.25rem 0.35rem 0.1rem;
 }
 
-/* The steppers and tallies are small controls inside a block whose inputs are otherwise
-   full-width; keep them from stretching. */
-.kfp-panel.resource .kfp-tally-input {
-  width: 3.2em;
-  flex: 0 0 auto;
+/* Breathing room between the two tallies, which sit in a block whose other rows are
+   wider. */
+.kfp-panel.resource .kfp-tallies {
+  gap: 1.5rem;
+  margin-top: 0.45rem;
+}
+
+.kfp-panel.resource .kfp-tally {
+  gap: 0.4rem;
 }
 
 /* --- GM window ---------------------------------------------------------- */
