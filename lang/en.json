@@ -30,8 +30,7 @@
   "KFP.Threshold.Reminder": "This module reports these effects; it does not apply them.",
 
   "KFP.Window.Title": "Force Presence",
-  "KFP.Window.Open": "Open",
-  "KFP.Window.NoCanvas": "Force Presence cannot open from the scene controls while no scene is active — Foundry discards every scene-control click without a canvas. Activate a scene, or open it from Settings → Force Presence.",
+  "KFP.Window.NoCanvas": "Force Presence cannot open while no scene is active — Foundry discards every scene-control click without a canvas. Activate a scene and try again.",
   "KFP.Window.Character": "Character",
   "KFP.Window.Status": "Status",
   "KFP.Window.SweepRunning": "End-of-session resolution in progress.",

@@ -418,17 +418,17 @@ export function openForcePresenceWindow() {
 }
 
 /**
- * Two entry points, because one of them is not always usable.
+ * A scene control, rather than an entry in the system's destiny-tracker context menu:
+ * that menu is a local const passed into the tracker and cannot be extended without
+ * patching. `getSceneControlButtons` is core Foundry and costs the system nothing.
  *
- * THE SCENE CONTROL IS CANVAS-GATED. Foundry opens every tool click with
- * `if ( !canvas.ready ) return;` (scene-controls.mjs #onChangeTool), so with no scene
- * loaded the button renders, shows its tooltip, and silently does nothing -- which is
- * precisely the situation a GM is in when doing end-of-session bookkeeping between
- * scenes. Nothing about a window listing character data needs a canvas, so it must not
- * depend on one.
- *
- * The Settings sidebar tab is always present, so it carries the reliable entry point and
- * the scene control stays as the convenient one while a scene is open.
+ * THE SCENE CONTROL IS CANVAS-GATED, and deliberately remains the only entry point.
+ * Foundry opens every tool click with `if ( !canvas.ready ) return;`
+ * (scene-controls.mjs #onChangeTool), so with no scene loaded the button renders, shows
+ * its tooltip, and the click is discarded before the tool is ever consulted. Nothing
+ * about this window needs a canvas, so that is a Foundry constraint rather than a real
+ * one -- but a silent no-op is indistinguishable from a broken module, so the click is
+ * intercepted and explained instead of vanishing.
  */
 export function registerGmWindow() {
   Hooks.on("getSceneControlButtons", (controls) => {
@@ -473,24 +473,3 @@ export function registerGmWindow() {
     );
   });
 
-  Hooks.on("renderSettings", (_app, element) => {
-    if (!game.user.isGM) return;
-    const root = element instanceof HTMLElement ? element : element?.[0];
-    if (!root || root.querySelector(`.${MODULE_ID}-settings`)) return;
-
-    const section = document.createElement("section");
-    section.classList.add("settings", "flexcol", `${MODULE_ID}-settings`);
-    section.innerHTML =
-      `<h4 class="divider">${t("KFP.Window.Title")}</h4>` +
-      `<button type="button">` +
-        // `inert` matches how core marks icons inside buttons, so the click always
-        // targets the button rather than the icon.
-        `<i class="fa-solid fa-circle-half-stroke" inert></i> ${t("KFP.Window.Open")}` +
-      `</button>`;
-    section.querySelector("button").addEventListener("click", () => openForcePresenceWindow());
-
-    const existing = root.querySelector("section.settings");
-    if (existing) existing.after(section);
-    else root.append(section);
-  });
-}
