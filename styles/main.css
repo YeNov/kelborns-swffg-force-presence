@@ -7,23 +7,25 @@
  * little spacing, and the note tones.
  */
 
+/* No border, no background, no header styling of our own in either theme. On the default
+   sheet the panel IS a `.resource.single` block and on Codex it IS a `.cdx-panel`, so
+   both are drawn by the host stylesheet. Anything painted here would have to be
+   maintained twice and would drift from both. */
 .kfp-panel {
   margin: 0.5rem 0;
-  border: 1px solid var(--kfp-border, rgba(128, 128, 128, 0.35));
-  border-radius: 3px;
 }
 
+/* Centred in both themes: the blocks either side of it are. */
 .kfp-body {
   padding: 0.4rem 0.5rem;
+  text-align: center;
 }
 
-.kfp-head {
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 0.8em;
-  letter-spacing: 0.04em;
-  opacity: 0.8;
-  margin-bottom: 0.3rem;
+.kfp-scale,
+.kfp-steppers,
+.kfp-tallies,
+.kfp-starting {
+  justify-content: center;
 }
 
 /* --- the ten points ---------------------------------------------------- */
@@ -192,17 +194,19 @@ input.kfp-locked {
   color: var(--cdx-ink);
 }
 
-/* Centred, like the bio-stat panels it sits under. Scoped to Codex: the classic sheet
-   was not asked to change, and its blocks have their own alignment. */
-.cdx .kfp-panel.kfp-codex .kfp-body {
-  text-align: center;
+/* --- default (Mandar) theme --------------------------------------------- */
+
+/* `.block-attribute` is `display: grid`, so the body is its single cell and needs no
+   padding of its own -- the block already provides the inset. */
+.kfp-panel.resource .kfp-body {
+  padding: 0.25rem 0.35rem 0.1rem;
 }
 
-.cdx .kfp-panel.kfp-codex .kfp-scale,
-.cdx .kfp-panel.kfp-codex .kfp-steppers,
-.cdx .kfp-panel.kfp-codex .kfp-tallies,
-.cdx .kfp-panel.kfp-codex .kfp-starting {
-  justify-content: center;
+/* The steppers and tallies are small controls inside a block whose inputs are otherwise
+   full-width; keep them from stretching. */
+.kfp-panel.resource .kfp-tally-input {
+  width: 3.2em;
+  flex: 0 0 auto;
 }
 
 /* --- GM window ---------------------------------------------------------- */

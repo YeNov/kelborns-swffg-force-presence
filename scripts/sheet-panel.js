@@ -160,10 +160,21 @@ function panelHtml(state, editable, isCodex) {
     );
   }
 
+  // Default theme: the system's own block markup, so the card is drawn by the sheet's
+  // stylesheet exactly like the Morality, Conflict and Obligation blocks beside it.
+  //
+  // This is Codex-safe by construction, not by scoping: those rules are all written
+  // under `.starwarsffg`, and the Codex sheet's `_getLegacyRootClasses` REPLACES the
+  // legacy root classes rather than extending them, so a Codex root never carries
+  // `.starwarsffg` and can never pick them up.
   return (
-    `<div class="${PANEL_CLASS}">` +
-      `<div class="kfp-head">${t("KFP.Title")}</div>` +
-      `<div class="kfp-body">${body}</div>` +
+    `<div class="${PANEL_CLASS} resource single">` +
+      `<div class="attribute flex-group-center">` +
+        `<div class="block-background">` +
+          `<div class="block-title">${t("KFP.Title")}</div>` +
+          `<div class="block-attribute"><div class="kfp-body">${body}</div></div>` +
+        `</div>` +
+      `</div>` +
     `</div>`
   );
 }
