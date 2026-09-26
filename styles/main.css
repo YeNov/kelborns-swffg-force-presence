@@ -334,11 +334,17 @@ input.kfp-locked {
   text-shadow: 0 0 2px #fff, 0 0 1px #fff;
 }
 
+/* White FILL, not just a white outline. The light pip uses the filled disc character
+   here (see pips.js `solid`); the neutral glyph is half-filled by the font, so colour
+   alone is enough for it. A thin dark halo keeps both readable if the window is ever
+   dragged over pale content. */
 .theme-dark .kfp-window span.dietype.forcepoint,
 .theme-dark .kfp-window span.dietype.light,
 .kfp-window.theme-dark span.dietype.forcepoint,
 .kfp-window.theme-dark span.dietype.light {
   color: #fff;
+  -webkit-text-stroke: 0;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.6);
 }
 
 /* Bigger than on a sheet: this table is scanned across a whole party, and a 1px outline

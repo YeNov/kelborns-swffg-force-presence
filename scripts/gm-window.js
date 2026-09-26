@@ -130,7 +130,7 @@ export class ForcePresenceWindow extends HandlebarsApplicationMixin(ApplicationV
     return {
       // Raw HTML: the template prints these with {{{ }}} so the system's symbol font
       // renders, matching the pips on the character sheets.
-      points: renderScale(s).map((state) => pipHtml(state, theme)),
+      points: renderScale(s).map((state) => pipHtml(state, theme, { solid: true })),
       counts: `${s.dark}/${s.neutral}/${s.light}`,
       thresholdText: notes.join(" · "),
     };

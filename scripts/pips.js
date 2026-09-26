@@ -39,8 +39,17 @@ export function diceTheme() {
  * One Balance Point as HTML.
  * @param {"dark"|"neutral"|"light"} state
  * @param {string} theme  from `diceTheme()`, hoisted by callers drawing ten of these
+ * @param {object} [options]
+ * @param {boolean} [options.solid]
+ *   Draw the light pip with the FILLED disc character instead of the outline one.
+ *   The light glyph is a hollow ring, so on a dark background `color: #fff` paints only
+ *   its outline and leaves the interior dark -- CSS cannot fill a glyph the font draws
+ *   hollow. Swapping the character is the only way to get a solid white pip. The class
+ *   stays `light`, so the colour rules still apply and dark vs light remains a fill
+ *   difference (black disc with a white outline, versus a white disc).
  */
-export function pipHtml(state, theme = diceTheme()) {
+export function pipHtml(state, theme = diceTheme(), { solid = false } = {}) {
   const pip = PIPS[state] ?? PIPS.neutral;
-  return `<span class="dietype ${theme} ${pip.cls} kfp-point kfp-point-${state}">${pip.char}</span>`;
+  const char = solid && state === "light" ? PIPS.dark.char : pip.char;
+  return `<span class="dietype ${theme} ${pip.cls} kfp-point kfp-point-${state}">${char}</span>`;
 }
