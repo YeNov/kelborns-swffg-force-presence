@@ -128,7 +128,7 @@ function startingChoiceHtml(state, editable) {
     `<option value="${value}"${enabled ? "" : " disabled"}>${t(labelKey)}</option>`;
   return (
     `<div class="kfp-starting">` +
-      `<label>${t("KFP.Panel.StartingChoice")}</label>` +
+      `<label>${t("KFP.Panel.StartingChoice.Label")}</label>` +
       `<select class="kfp-starting-select">` +
         `<option value="">—</option>` +
         option(MOVES.NEUTRAL_TO_LIGHT, "KFP.Panel.StartingChoice.Light", canFlip) +
@@ -303,7 +303,7 @@ function activateListeners(panel, actor) {
     if (!choice) return;
     const label = select.selectedOptions[0]?.textContent ?? choice;
     const ok = await foundry.applications.api.DialogV2.confirm({
-      window: { title: t("KFP.Panel.StartingChoice") },
+      window: { title: t("KFP.Panel.StartingChoice.Label") },
       content: `<p>${t("KFP.Panel.StartingChoice.Confirm", { choice: label })}</p>`,
     });
     if (!ok) {

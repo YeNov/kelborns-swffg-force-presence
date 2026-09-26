@@ -18,42 +18,6 @@ import { registerSheetPanel } from "./sheet-panel.js";
 import { registerTransport } from "./transport.js";
 import { registerGmWindow, openForcePresenceWindow } from "./gm-window.js";
 
-/**
- * Load our own translations if Foundry did not.
- *
- * Foundry parses package manifests SERVER-SIDE, when it scans packages at startup, but
- * fetches `esmodules` live by URL. So a module whose `languages` entry appeared after
- * the server last scanned will run its code and show raw keys -- `KFP.Title` instead of
- * "Force Presence" -- and a browser reload will not fix it, because the browser is not
- * what is stale. Restarting the Foundry application is.
- *
- * That is a confusing failure to hit as a user, so rather than depend on it, check and
- * fill the gap. The warning is deliberate: this is a symptom worth seeing, not something
- * to paper over silently.
- */
-async function ensureTranslations() {
-  if (game.i18n.has("KFP.Title")) return;
-  try {
-    const response = await fetch(`modules/${MODULE_ID}/lang/en.json`);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    foundry.utils.mergeObject(game.i18n.translations, await response.json(), { inplace: true });
-    console.warn(
-      `${MODULE_ID} | Foundry did not load this module's language file, so it was merged ` +
-        `manually. Restart the Foundry application (not just the browser) so it rescans ` +
-        `module manifests.`,
-    );
-  } catch (err) {
-    console.error(`${MODULE_ID} | could not load lang/en.json`, err);
-  }
-}
-
-Hooks.once("i18nInit", () => {
-  // Fires after localization initializes and before `init`. Not awaited by Foundry, but
-  // every key here is read at render time -- settings form, sheets, the GM window --
-  // which is long after this resolves.
-  ensureTranslations();
-});
-
 Hooks.once("init", () => {
   // Pass the i18n KEYS, not localized strings. Foundry localizes a setting's name and
   // hint when the settings form renders (its SettingsConfig does

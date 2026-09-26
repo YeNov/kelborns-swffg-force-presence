@@ -10,7 +10,7 @@
 
   "KFP.Panel.Conflict": "Conflict",
   "KFP.Panel.Tranquility": "Tranquility",
-  "KFP.Panel.StartingChoice": "Starting choice",
+  "KFP.Panel.StartingChoice.Label": "Starting choice",
   "KFP.Panel.StartingChoice.Light": "Flip one Balance Point to Light Side",
   "KFP.Panel.StartingChoice.Dark": "Flip one Balance Point to Dark Side",
   "KFP.Panel.StartingChoice.None": "Took XP or credits instead",
