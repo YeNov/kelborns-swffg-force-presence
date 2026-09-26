@@ -1,26 +1,31 @@
 /**
  * Module entry point.
  *
- * SCAFFOLD STATE: the pure rules core and the sweep state machine are implemented and
- * tested (`node --test`, 59 assertions). The Foundry-facing adapters are NOT yet built:
+ * SCAFFOLD STATE: the pure rules core, the sweep state machine and the character sheet
+ * panel are built. Still TODO:
  *
- *   - scripts/sheet-panel.js   renderActorSheetV2 injection, both sheets   TODO
  *   - scripts/gm-window.js     standalone Application + scene control      TODO
  *   - scripts/transport.js     socketlib handshake + the response deadline TODO
  *
- * Until those land this registers the module's settings and exposes the pure API for
- * inspection from the console. It deliberately does not touch a sheet or an actor, so
- * installing it at this stage changes nothing in a world.
+ * So the end-of-session sweep cannot be run from the UI yet, though its logic is
+ * implemented and tested.
  */
 
 import { MODULE_ID, SETTINGS } from "./constants.js";
 import * as rules from "./rules.js";
 import { createSweep } from "./sweep.js";
+import { registerSheetPanel } from "./sheet-panel.js";
 
 Hooks.once("init", () => {
+  // Pass the i18n KEYS, not localized strings. Foundry localizes a setting's name and
+  // hint when the settings form renders (its SettingsConfig does
+  // `label ||= _loc(setting.name)`), by which point every language file is loaded.
+  // Localizing here instead bakes in whatever was available at init -- and if the
+  // module's own lang file has not loaded yet, that is the raw key, permanently, for
+  // the rest of the session. It also breaks the lang hot-reload this module declares.
   game.settings.register(MODULE_ID, SETTINGS.PUBLIC_CARDS, {
-    name: game.i18n.localize("KFP.Settings.PublicCards.Name"),
-    hint: game.i18n.localize("KFP.Settings.PublicCards.Hint"),
+    name: "KFP.Settings.PublicCards.Name",
+    hint: "KFP.Settings.PublicCards.Hint",
     scope: "world",
     config: true,
     default: false,
@@ -36,8 +41,11 @@ Hooks.once("init", () => {
     type: Object,
   });
 
-  // Console handle for inspection while the adapters are unbuilt.
-  game.modules.get(MODULE_ID).api = { rules, createSweep };
+  registerSheetPanel();
+
+  // Console handle for inspection while the remaining adapters are unbuilt.
+  const self = game.modules.get(MODULE_ID);
+  if (self) self.api = { rules, createSweep };
 });
 
 Hooks.once("ready", () => {
@@ -45,5 +53,5 @@ Hooks.once("ready", () => {
     console.warn(`${MODULE_ID} | inactive: this module is for the starwarsffg system.`);
     return;
   }
-  console.log(`${MODULE_ID} | rules core loaded. Sheet panel and GM window not yet wired.`);
+  console.log(`${MODULE_ID} | sheet panel active. GM window and sweep transport not yet wired.`);
 });

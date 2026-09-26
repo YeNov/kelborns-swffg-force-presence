@@ -5,7 +5,10 @@ Presence* optional rules from the reSpecialized project's **Optional Morality Ru
 (credited in the source to contributor **Nori**), as an add-on to the `starwarsffg`
 system.
 
-Status: design settled 2026-09-26. Not yet implemented.
+Status: design settled 2026-09-26. Built: the pure rules core (§1), the sheet panel (§2)
+and the sweep state machine (§4, logic only). Not built: the GM window (§3), the
+socketlib transport, the conversion tool (§3) and the reporting surface (§6) beyond the
+panel's own threshold notes.
 
 ---
 

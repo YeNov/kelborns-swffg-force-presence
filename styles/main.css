@@ -1,13 +1,169 @@
-/* Force Presence panel. Scale glyphs, tallies, threshold notes. */
+/*
+ * Force Presence panel.
+ *
+ * Deliberately restrained: the panel sits inside someone else's sheet, on two different
+ * themes (classic and Codex), each with its own colour scheme. It inherits font and
+ * colour from the host sheet and only defines what it must -- the three point states, a
+ * little spacing, and the note tones.
+ */
 
-.kfp-panel { margin-top: 0.5rem; }
+.kfp-panel {
+  margin: 0.5rem 0;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--kfp-border, rgba(128, 128, 128, 0.35));
+  border-radius: 3px;
+}
 
-.kfp-scale { display: flex; gap: 0.15rem; align-items: center; font-size: 1.1rem; }
-.kfp-point-dark { color: var(--kfp-dark, #1a1a1a); }
-.kfp-point-neutral { color: var(--kfp-neutral, #7a7a7a); }
-.kfp-point-light { color: var(--kfp-light, #cfcfcf); }
+.kfp-head {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  letter-spacing: 0.04em;
+  opacity: 0.8;
+  margin-bottom: 0.3rem;
+}
 
-.kfp-tallies { display: flex; gap: 0.5rem; margin-top: 0.35rem; }
-.kfp-note { font-size: 0.85em; opacity: 0.85; margin-top: 0.35rem; }
-.kfp-note-dark { color: var(--kfp-note-dark, #b3261e); }
-.kfp-note-light { color: var(--kfp-note-light, #1f5fb3); }
+/* --- the ten points ---------------------------------------------------- */
+
+.kfp-scale {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.12rem;
+  align-items: center;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* Dark and Light are near-black and near-white in the source's printed scale. Both get
+   a faint outline so neither disappears against a dark or a light sheet theme. */
+.kfp-point-dark {
+  color: #14110f;
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.55);
+}
+
+.kfp-point-neutral {
+  color: #8a8a8a;
+}
+
+.kfp-point-light {
+  color: #f2efe9;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.55);
+}
+
+.kfp-scale-count {
+  margin-left: 0.4rem;
+  font-size: 0.8em;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+/* --- steppers and tallies ---------------------------------------------- */
+
+.kfp-steppers,
+.kfp-tallies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 0.35rem;
+}
+
+.kfp-stepper,
+.kfp-tally {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.kfp-stepper label,
+.kfp-tally label {
+  font-size: 0.8em;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+.kfp-count {
+  min-width: 1.4em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.kfp-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2em;
+  height: 1.2em;
+  font-size: 0.7em;
+  border: 1px solid var(--kfp-border, rgba(128, 128, 128, 0.45));
+  border-radius: 2px;
+  cursor: pointer;
+  opacity: 0.75;
+}
+
+.kfp-step:hover {
+  opacity: 1;
+}
+
+.kfp-tally-input {
+  width: 3.2em;
+  text-align: center;
+}
+
+/* --- starting choice --------------------------------------------------- */
+
+.kfp-starting {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+}
+
+.kfp-starting label {
+  font-size: 0.8em;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+.kfp-starting-select {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* --- threshold notes --------------------------------------------------- */
+
+.kfp-note {
+  font-size: 0.8em;
+  line-height: 1.35;
+  margin-top: 0.3rem;
+}
+
+.kfp-note-dark {
+  color: #b3261e;
+}
+
+.kfp-note-light {
+  color: #1f5fb3;
+}
+
+/* The "reported, not applied" reminder is the quietest thing in the panel. */
+.kfp-note-quiet {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* --- the locked Morality input ----------------------------------------- */
+
+input.kfp-locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- Codex theme ------------------------------------------------------- */
+
+/* The Codex sheet draws its own notched panels; borrow the look rather than stacking a
+   second border inside one. */
+.cdx .kfp-panel.kfp-codex {
+  border: none;
+  padding: 0.3rem 0.1rem;
+}

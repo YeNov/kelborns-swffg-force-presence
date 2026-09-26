@@ -14,6 +14,7 @@
   "KFP.Panel.StartingChoice.Light": "Flip one Balance Point to Light Side",
   "KFP.Panel.StartingChoice.Dark": "Flip one Balance Point to Dark Side",
   "KFP.Panel.StartingChoice.None": "Took XP or credits instead",
+  "KFP.Panel.StartingChoice.Confirm": "Take \"{choice}\" as this character's starting choice? This can only be done once.",
   "KFP.Panel.MoralityUnused": "Not used under Force Presence. The Balance scale replaces the Morality score.",
 
   "KFP.Move.neutral-to-dark": "Neutral → Dark Side",
