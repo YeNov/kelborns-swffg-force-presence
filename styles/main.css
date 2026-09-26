@@ -295,6 +295,33 @@ input.kfp-locked {
   margin: 0.15rem 0.15rem 0 0;
 }
 
+/* The pips are the system's die symbols, which are black by default -- invisible on the
+   GM window's dark chrome. The system already solves this in its own dark contexts
+   (cdx.css for the dice-pool dialog, cdx-dark.css for the dark Codex scheme) with
+   exactly this treatment, so use the same one rather than inventing a third:
+
+     dark     black fill with a 1px white outline, so it reads as a filled dark pip
+     neutral  white
+     light    white
+
+   Scoped to dark themes on purpose. Under a light theme the system's own black is
+   correct, and a white-filled light pip would vanish against pale chrome.
+   `.theme-dark` covers both placements: Foundry sets it on `body` for the interface
+   theme and on the application element for per-window themes. */
+.theme-dark .kfp-window span.dietype.dark,
+.kfp-window.theme-dark span.dietype.dark {
+  color: #000;
+  -webkit-text-stroke: 1px #fff;
+  paint-order: stroke fill;
+}
+
+.theme-dark .kfp-window span.dietype.forcepoint,
+.theme-dark .kfp-window span.dietype.light,
+.kfp-window.theme-dark span.dietype.forcepoint,
+.kfp-window.theme-dark span.dietype.light {
+  color: #fff;
+}
+
 /* --- chat cards and the player prompt ----------------------------------- */
 
 .kfp-card-scale {
