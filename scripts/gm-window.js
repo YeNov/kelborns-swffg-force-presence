@@ -472,4 +472,4 @@ export function registerGmWindow() {
       { capture: true },
     );
   });
-
+}
